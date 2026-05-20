@@ -12,6 +12,7 @@
 | `setup-reality.sh` | 装 3x-ui + 建一个 VLESS+TCP+REALITY 入口，结束打印面板登录信息和 `vless://` 分享链接 |
 | `setup-relay.sh` | 在中转 VPS 上建本地 REALITY 入口，并把出口链到住宅节点（粘贴住宅节点的 `vless://` 链接即可） |
 | `lib.sh` | 两个脚本共用的函数库 |
+| `print-quickstart.sh` | 维护者辅助：生成下文「只有 git 时的一条命令」，支持 reality / relay 两种模式 |
 
 典型拓扑：
 
