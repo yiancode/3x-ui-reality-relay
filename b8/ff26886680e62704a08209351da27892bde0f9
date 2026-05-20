@@ -1,0 +1,30 @@
+lib.sh
+  577f88a05e059f52 11-14,70-73
+README.md
+  577f88a05e059f52 116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "b8ff26886680e62704a08209351da27892bde0f9",
+  "prompts": {
+    "577f88a05e059f52": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bbca501d-2946-4705-b2f0-2fd13523b1c3",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "yian",
+      "messages": [],
+      "total_additions": 9,
+      "total_deletions": 4,
+      "accepted_lines": 9,
+      "overriden_lines": 0,
+      "messages_url": "http://10.9.107.193:8000/cas/2a6c21019cabc2835d268d80361083f5b80754d311f2c6268f8e8742511447cf",
+      "custom_attributes": {
+        "team": "风控研发中心",
+        "user": "stinglong"
+      }
+    }
+  }
+}
