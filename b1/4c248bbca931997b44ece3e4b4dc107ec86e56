@@ -1,0 +1,30 @@
+lib.sh
+  577f88a05e059f52 183-184,189-198,203-206
+setup-relay.sh
+  577f88a05e059f52 110-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "b14c248bbca931997b44ece3e4b4dc107ec86e56",
+  "prompts": {
+    "577f88a05e059f52": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bbca501d-2946-4705-b2f0-2fd13523b1c3",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "yian",
+      "messages": [],
+      "total_additions": 23,
+      "total_deletions": 6,
+      "accepted_lines": 23,
+      "overriden_lines": 0,
+      "messages_url": "http://10.9.107.193:8000/cas/60623b2351fd725f9cb184159646b9e6c03d24f78650f9d5f84870275ad62d1f",
+      "custom_attributes": {
+        "user": "stinglong",
+        "team": "风控研发中心"
+      }
+    }
+  }
+}
