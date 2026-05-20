@@ -1,0 +1,30 @@
+bootstrap.sh
+  a0c9b5d9d676a8b1 1-45
+README.md
+  a0c9b5d9d676a8b1 11,30-33,35-37,40-42,45-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "5014db4034f9706acf8067fedfbc45552a288665",
+  "prompts": {
+    "a0c9b5d9d676a8b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "560e4fd0-af20-4f31-bec1-ba06a356bb5e",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "yian",
+      "messages": [],
+      "total_additions": 76,
+      "total_deletions": 5,
+      "accepted_lines": 74,
+      "overriden_lines": 0,
+      "messages_url": "http://10.9.107.193:8000/cas/4fb7b98d78d87d3c55dc42e1d1849083fab1deec342892b9ea2843fa4e7d128e",
+      "custom_attributes": {
+        "team": "风控研发中心",
+        "user": "stinglong"
+      }
+    }
+  }
+}
