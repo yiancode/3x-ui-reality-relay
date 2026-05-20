@@ -154,7 +154,9 @@ wait_panel_ready() {
   c_info "等待面板端口 $port 就绪 ..."
   for i in $(seq 1 30); do
     for scheme in http https; do
-      code="$(curl -sk -o /dev/null -w '%{http_code}' --max-time 4 "${scheme}://127.0.0.1:${port}${base}" 2>/dev/null)"
+      # `|| true`：面板刚重启时首探必然连不上（curl exit 7），set -e 会就此终止整个
+      # 脚本，根本进不了重试循环。容忍 curl 失败，让下方的 != "000" 判断接管重试。
+      code="$(curl -sk -o /dev/null -w '%{http_code}' --max-time 4 "${scheme}://127.0.0.1:${port}${base}" 2>/dev/null || true)"
       if [ -n "$code" ] && [ "$code" != "000" ]; then
         PANEL_SCHEME="$scheme"
         c_ok "面板已就绪（${scheme}，HTTP $code）"
