@@ -8,6 +8,7 @@
 
 | 脚本 | 作用 |
 |------|------|
+| `bootstrap.sh` | 一条命令入口：自动 `sudo` 提权并分发到下面的安装/中转脚本 |
 | `setup-reality.sh` | 装 3x-ui + 建一个 VLESS+TCP+REALITY 入口，结束打印面板登录信息和 `vless://` 分享链接 |
 | `setup-relay.sh` | 在中转 VPS 上建本地 REALITY 入口，并把出口链到住宅节点（粘贴住宅节点的 `vless://` 链接即可） |
 | `lib.sh` | 两个脚本共用的函数库 |
@@ -26,14 +27,39 @@
 
 ## 快速开始
 
+### 0) 只有 git 时的一条命令
+
+机器上几乎只有 `git`？落地 / 住宅 VPS 直接跑下面这一条，装好 3x-ui 并建好 REALITY 节点：
+
+```bash
+REPO_DIR="${HOME}/.3x-ui-reality-relay" && \
+([ -d "$REPO_DIR/.git" ] && git -C "$REPO_DIR" fetch --depth=1 origin main && git -C "$REPO_DIR" reset --hard origin/main || git clone --depth=1 https://github.com/yiancode/3x-ui-reality-relay.git "$REPO_DIR") && \
+bash "$REPO_DIR/bootstrap.sh"
+```
+
+这条命令会：拉取/更新最新代码 → 自动 `sudo` 提权 → 安装依赖 → 装 3x-ui → 建 VLESS+TCP+REALITY 节点 → 打印面板信息和节点 `vless://` 链接。
+
+想在一条命令里自定义端口 / 伪装域名（环境变量经 `sudo -E` 透传）：
+
+```bash
+REPO_DIR="${HOME}/.3x-ui-reality-relay" && \
+([ -d "$REPO_DIR/.git" ] && git -C "$REPO_DIR" fetch --depth=1 origin main && git -C "$REPO_DIR" reset --hard origin/main || git clone --depth=1 https://github.com/yiancode/3x-ui-reality-relay.git "$REPO_DIR") && \
+PANEL_PORT=2053 NODE_PORT=443 REALITY_SNI=www.microsoft.com bash "$REPO_DIR/bootstrap.sh"
+```
+
+中转 VPS 一条命令（把住宅节点的 `vless://` 链接贴进去）：
+
+```bash
+REPO_DIR="${HOME}/.3x-ui-reality-relay" && \
+([ -d "$REPO_DIR/.git" ] && git -C "$REPO_DIR" fetch --depth=1 origin main && git -C "$REPO_DIR" reset --hard origin/main || git clone --depth=1 https://github.com/yiancode/3x-ui-reality-relay.git "$REPO_DIR") && \
+bash "$REPO_DIR/bootstrap.sh" relay 'vless://....#住宅节点'
+```
+
+### 1. 落地 / 住宅 VPS：安装 + 建节点（手动方式）
+
 ```bash
 git clone https://github.com/yiancode/3x-ui-reality-relay.git
 cd 3x-ui-reality-relay
-```
-
-### 1. 落地 / 住宅 VPS：安装 + 建节点
-
-```bash
 sudo bash setup-reality.sh
 ```
 
