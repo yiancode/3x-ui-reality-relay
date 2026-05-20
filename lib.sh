@@ -180,18 +180,30 @@ api_post() {
     -d "$body"
 }
 
-# 读取 xray 模板配置（xrayTemplateConfig）
+# 读取 xray 模板配置（xrayTemplateConfig）。
+# 注意：3x-ui 只把「非默认」设置写进 settings 表，全新安装时该 key 不存在，返回空。
 read_xray_template() {
   sqlite3 "$XUI_DB" "SELECT value FROM settings WHERE key='xrayTemplateConfig';"
 }
 
-# 写回 xray 模板配置（参数为完整 JSON 字符串）
+# 拉取钉定版本的内嵌默认 xray 模板（DB 无该 key 时作为注入基底）。
+# 3x-ui 的默认模板是源码 web/service/config.json 经 //go:embed 编译进二进制的，
+# 磁盘上没有副本；从对应 tag 的 raw 文件取，与已安装版本精确一致。
+fetch_default_xray_template() {
+  curl -fsSL --max-time 15 \
+    "https://raw.githubusercontent.com/MHSanaei/3x-ui/${XUI_VERSION}/web/service/config.json"
+}
+
+# 写回 xray 模板配置（参数为完整 JSON 字符串）。
+# settings.key 无唯一约束，且该 key 可能尚不存在，故用 DELETE+INSERT 保证恰好一行。
 write_xray_template() {
   local json="$1" tmp
   tmp="$(mktemp)"
   printf '%s' "$json" > "$tmp"
-  # 用参数化方式写入，避免引号转义问题
-  sqlite3 "$XUI_DB" "UPDATE settings SET value=readfile('$tmp') WHERE key='xrayTemplateConfig';" \
+  # readfile() 参数化写入，避免引号/转义问题；两条语句一次执行。
+  sqlite3 "$XUI_DB" \
+    "DELETE FROM settings WHERE key='xrayTemplateConfig';
+     INSERT INTO settings(key,value) VALUES('xrayTemplateConfig', readfile('$tmp'));" \
     || { rm -f "$tmp"; die "写入 xrayTemplateConfig 失败"; }
   rm -f "$tmp"
 }

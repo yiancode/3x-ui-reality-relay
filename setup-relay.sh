@@ -107,8 +107,13 @@ inject_relay() {
   rule="$(jq -cn --arg in "$ENTRY_TAG" --arg out "$OUT_TAG" \
     '{type:"field",inboundTag:[$in],outboundTag:$out}')"
   tmpl="$(read_xray_template)"
-  [ -n "$tmpl" ] || die "读取 xrayTemplateConfig 为空"
-  echo "$tmpl" | jq -e . >/dev/null 2>&1 || die "现有 xray 模板不是合法 JSON"
+  if [ -z "$tmpl" ]; then
+    # 全新安装时 DB 无 xrayTemplateConfig（默认未持久化），拉取钉定版本内嵌默认模板作基底
+    c_info "DB 无 xrayTemplateConfig，拉取 $XUI_VERSION 默认 xray 模板作为基底 ..."
+    tmpl="$(fetch_default_xray_template)" || die "拉取默认 xray 模板失败（检查能否访问 GitHub）"
+    [ -n "$tmpl" ] || die "默认 xray 模板为空"
+  fi
+  echo "$tmpl" | jq -e . >/dev/null 2>&1 || die "xray 模板不是合法 JSON"
   new="$(echo "$tmpl" | jq \
     --argjson ob "$outbound" --argjson rule "$rule" --arg out "$OUT_TAG" '
       .outbounds = ((.outbounds // [] | map(select(.tag != $out))) + [$ob])
