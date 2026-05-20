@@ -1,0 +1,28 @@
+README.md
+  577f88a05e059f52 118-131
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "5de2aa4c502a1df47886794f06e66cb80fa87800",
+  "prompts": {
+    "577f88a05e059f52": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bbca501d-2946-4705-b2f0-2fd13523b1c3",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "yian",
+      "messages": [],
+      "total_additions": 14,
+      "total_deletions": 0,
+      "accepted_lines": 14,
+      "overriden_lines": 0,
+      "messages_url": "http://10.9.107.193:8000/cas/f9c4fc073aa7719d4179fc38e39e5418b8ecdbfbb0f60561c952f7bc76b0d2fa",
+      "custom_attributes": {
+        "team": "风控研发中心",
+        "user": "stinglong"
+      }
+    }
+  }
+}
