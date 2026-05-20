@@ -113,7 +113,7 @@ sudo bash setup-relay.sh 'vless://....#住宅节点'
 - REALITY 密钥用 `xray x25519` 现生成，UUID 取自 `/proc/sys/kernel/random/uuid`，shortId 用 `openssl rand`。
 - 中转的出口与路由没有专用 API，脚本读取 `x-ui.db` 里的 `xrayTemplateConfig`，用 `jq` 注入一个 VLESS+REALITY 出口和一条「入口 tag → 出口 tag」的路由规则，写回后重启。注入是**幂等**的，并保持默认出口仍为 `direct`（只有中转入口的流量走住宅）。
 
-> 已对照 3x-ui `master`（v3.0.2）源码验证 API 路径、CLI 子命令与字段名。其它分支/旧版本可能有差异。
+> 安装版本钉定在 **v3.0.2**（`lib.sh` 的 `XUI_VERSION`，可用环境变量覆盖）。原因：v3.x 在 GitHub 上仍是 prerelease，官方 `install.sh` 不带参数只会装最新稳定版 v2.9.4，而 v2.9.4 没有 `x-ui setting -getApiToken`，本项目的 API Token 鉴权依赖它。已对照 v3.0.2 验证 API 路径、CLI 子命令与字段名。其它版本可能有差异。
 
 ## 排错
 

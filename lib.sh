@@ -8,6 +8,10 @@ XUI_BIN="/usr/local/x-ui/x-ui"
 XUI_DB="/etc/x-ui/x-ui.db"
 XUI_BIN_DIR="/usr/local/x-ui/bin"
 INSTALL_URL="https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh"
+# 钉定安装版本：v3.x 在 GitHub 仍是 prerelease，官方 install.sh 不带参数只会装最新
+# 稳定版（v2.9.4），而该版本无 `x-ui setting -getApiToken`，本项目的 API Token 鉴权
+# 依赖它。故显式传版本号给 install.sh，安装本项目已核实的 v3.0.2。
+XUI_VERSION="${XUI_VERSION:-v3.0.2}"
 
 # 运行期填充的全局变量
 PANEL_SCHEME="http"   # 默认面板走 http（全新安装无 SSL 证书）
@@ -63,9 +67,10 @@ install_3xui_if_absent() {
     c_ok "检测到已安装的 3x-ui，跳过安装"
     return 0
   fi
-  c_info "下载并安装 3x-ui（官方脚本，自定义端口处自动选 n，稍后用 CLI 覆盖）..."
-  # 官方脚本装完会交互询问是否自定义端口，喂多个 n 走随机端口；随后我们用 CLI 覆盖
-  printf 'n\nn\nn\n' | bash <(curl -Ls "$INSTALL_URL") || die "3x-ui 安装失败"
+  c_info "下载并安装 3x-ui $XUI_VERSION（官方脚本，自定义端口处自动选 n，稍后用 CLI 覆盖）..."
+  # 官方脚本装完会交互询问是否自定义端口，喂多个 n 走随机端口；随后我们用 CLI 覆盖。
+  # 末尾传 $XUI_VERSION 给官方 install.sh 钉定版本，绕过它默认只取最新稳定版的逻辑。
+  printf 'n\nn\nn\n' | bash <(curl -Ls "$INSTALL_URL") "$XUI_VERSION" || die "3x-ui 安装失败"
   is_3xui_installed || die "安装后未找到 $XUI_BIN"
   c_ok "3x-ui 安装完成"
 }
