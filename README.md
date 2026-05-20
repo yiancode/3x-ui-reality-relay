@@ -115,6 +115,20 @@ sudo bash setup-relay.sh 'vless://....#住宅节点'
 
 > 安装版本钉定在 **v3.0.2**（`lib.sh` 的 `XUI_VERSION`，可用环境变量覆盖）。原因：v3.x 在 GitHub 上仍是 prerelease，官方 `install.sh` 不带参数只会装最新稳定版 v2.9.4，而 v2.9.4 没有 `x-ui setting -getApiToken`，本项目的 API Token 鉴权依赖它。已对照 v3.0.2 验证 API 路径、CLI 子命令与字段名。其它版本可能有差异。
 
+## 客户端导入与使用
+
+把脚本打印的 `vless://` 链接导入客户端（v2rayN / NekoBox / Shadowrocket 等）即可。两个常见坑：
+
+**1. 导入后务必核对 `flow`。** 节点用的是 XTLS Vision，客户端的「流控 / Flow」必须是 `xtls-rprx-vision`，与服务端一致。**实测 v2rayN（macOS V7）从链接导入会丢掉 `flow` 字段**，结果就是测速 `-1`、握手失败、连不上——而服务器其实完全正常。排查顺序：节点连不上但 `journalctl -u x-ui` 无异常时，先检查客户端该节点的 Flow 是否为 `xtls-rprx-vision`，缺了就在节点编辑里手动补上、重启服务。NekoBox / sing-box 内核一般能正确解析，不丢。
+
+**2. 中转节点的落地 IP = 上游节点的 IP，不是中转 VPS 的 IP。** 客户端连中转节点出网，落地 IP 是你喂给 `setup-relay` 的那个上游（住宅/落地）节点的 IP；中转 VPS 只做转发。若中转和上游恰好同机房，落地 IP 看起来「没变化」是正常的。要拿到住宅 IP 出口，就把住宅节点的 `vless://` 喂给中转：
+
+```bash
+sudo bash setup-relay.sh 'vless://<你的住宅节点链接>'
+```
+
+验证落地 IP 时别用某些会拦数据中心 IP 的查询站，换 `ipinfo.io` 之类即可。
+
 ## 排错
 
 ```bash
